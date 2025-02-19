@@ -18,11 +18,21 @@ class FirestoreEncoder(json.JSONEncoder):
 # Helper functions
 def create_task(number, drinks, food, extra):
     """Create a new task in Firestore"""
+    # Format drinks as a comma-separated string
+    formatted_drinks = []
+    for name, quantity in drinks.items():
+        if quantity and int(quantity) > 0:
+            item_name = name.replace('_', ' ').title()
+            # Remove 'Juice' from juice items
+            item_name = item_name.replace(' Juice', '')
+            formatted_drinks.append(f"{quantity}x {item_name}")
+    
+    drinks_str = ', '.join(formatted_drinks) if formatted_drinks else 'N/A'
+    
     task_data = {
         'number': number,
-        'drinks': drinks,
-        'food': food,
-        'extra': extra,
+        'drinks': drinks_str,
+        'extra': extra if extra else 'N/A',
         'timestamp': SERVER_TIMESTAMP
     }
     
@@ -59,15 +69,15 @@ def requestor():
     number = request.args.get('num', '')
     
     if request.method == 'POST':
-        if number and any([
-            request.form.get('drinks'),
-            request.form.get('food'),
-            request.form.get('extra')
-        ]):
+        # Get all form items with non-zero quantities
+        drinks = {k: v for k, v in request.form.items() 
+                 if k not in ['number', 'extra'] and v.isdigit() and int(v) > 0}
+        
+        if number and drinks:
             create_task(
                 number,
-                request.form.get('drinks'),
-                request.form.get('food'),
+                drinks,
+                None,
                 request.form.get('extra')
             )
         return redirect(url_for('requestor', num=number))

@@ -22,12 +22,10 @@
       height: 51px;
     }
     .hero-section {
-      background: url('https://via.placeholder.com/1200x400?text=Futuristic+City+Hero') no-repeat center center;
-      background-size: cover;
-      height: 300px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      background-color: #ffffff;
+      padding: 2rem 0;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     .hero-section h1 {
       font-weight: 700;
@@ -40,6 +38,76 @@
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       background-color: #ffffff;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .menu-container {
+      display: flex;
+      gap: 4rem;
+      padding: 0 2rem;
+    }
+    .menu-column {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .menu-section {
+      margin-bottom: 3rem;
+      flex: 1;
+    }
+    .menu-section:last-child {
+      margin-bottom: 0;
+    }
+    .menu-title {
+      color: #4CB7B1;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+    }
+    .menu-items {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #e5fbfe;
+    }
+    .menu-item span {
+      font-size: 1rem;
+      color: #306873;
+    }
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .quantity-btn {
+      background-color: #4CB7B1;
+      color: white;
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: background-color 0.2s;
+    }
+    .quantity-btn:hover {
+      background-color: #3BA39D;
+    }
+    .quantity-display {
+      width: 30px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 1.1rem;
     }
     .form-control {
       border: 2px solid #e5fbfe;
@@ -55,7 +123,8 @@
       background-color: #4CB7B1;
       border-color: #4CB7B1;
       font-weight: 600;
-      padding: 10px 20px;
+      padding: 12px 30px;
+      font-size: 1.1rem;
     }
     .btn-primary:hover {
       background-color: #3BA39D;
@@ -64,6 +133,23 @@
     .form-label {
       font-weight: 600;
       color: #306873;
+    }
+    @media (max-width: 768px) {
+      .menu-container {
+        flex-direction: column;
+        gap: 2rem;
+        padding: 0 1rem;
+      }
+      .menu-section {
+        margin-bottom: 2rem;
+      }
+    }
+    .extra-notes-section {
+      border-top: 2px solid #e5fbfe;
+      padding-top: 2rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
     }
   </style>
 </head>
@@ -87,18 +173,215 @@
       <h2 class="card-title text-center mb-4">Place Your Order</h2>
       
       <form method="post" class="needs-validation" novalidate>
-        <div class="mb-3">
-          <label for="drinks" class="form-label">Drinks</label>
-          <input type="text" class="form-control" id="drinks" name="drinks" placeholder="Enter drinks order">
+        <div class="menu-container">
+          <!-- Left Column -->
+          <div class="menu-column">
+            <!-- Coffee Section -->
+            <div class="menu-section">
+              <h3 class="menu-title">Coffee</h3>
+              <div class="menu-items">
+                <div class="menu-item">
+                  <span>Arabic Coffee</span>
+                  <div class="quantity-control">
+                    <button type="button" class="quantity-btn minus" data-item="arabic_coffee">-</button>
+                    <span class="quantity-display">0</span>
+                    <button type="button" class="quantity-btn plus" data-item="arabic_coffee">+</button>
+                    <input type="hidden" name="arabic_coffee" value="0">
+                  </div>
+                </div>
+                <div class="menu-item">
+                  <span>Americano</span>
+                  <div class="quantity-control">
+                    <button type="button" class="quantity-btn minus" data-item="americano">-</button>
+                    <span class="quantity-display">0</span>
+                    <button type="button" class="quantity-btn plus" data-item="americano">+</button>
+                    <input type="hidden" name="americano" value="0">
+                  </div>
+                </div>
+                <div class="menu-item">
+                  <span>Espresso</span>
+                  <div class="quantity-control">
+                    <button type="button" class="quantity-btn minus" data-item="espresso">-</button>
+                    <span class="quantity-display">0</span>
+                    <button type="button" class="quantity-btn plus" data-item="espresso">+</button>
+                    <input type="hidden" name="espresso" value="0">
+                  </div>
+                </div>
+                <div class="menu-item">
+                  <span>Latte</span>
+                  <div class="quantity-control">
+                    <button type="button" class="quantity-btn minus" data-item="latte">-</button>
+                    <span class="quantity-display">0</span>
+                    <button type="button" class="quantity-btn plus" data-item="latte">+</button>
+                    <input type="hidden" name="latte" value="0">
+                  </div>
+                </div>
+                <div class="menu-item">
+                  <span>Cappuccino</span>
+                  <div class="quantity-control">
+                    <button type="button" class="quantity-btn minus" data-item="cappuccino">-</button>
+                    <span class="quantity-display">0</span>
+                    <button type="button" class="quantity-btn plus" data-item="cappuccino">+</button>
+                    <input type="hidden" name="cappuccino" value="0">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tea Section -->
+            <div class="menu-section">
+              <h3 class="menu-title">Tea</h3>
+              <div class="menu-items">
+                <div class="menu-item">
+                  <span>Black Tea</span>
+                  <div class="quantity-control">
+                    <button type="button" class="quantity-btn minus" data-item="black_tea">-</button>
+                    <span class="quantity-display">0</span>
+                    <button type="button" class="quantity-btn plus" data-item="black_tea">+</button>
+                    <input type="hidden" name="black_tea" value="0">
+                  </div>
+                </div>
+                <div class="menu-item">
+                  <span>Green Tea</span>
+                  <div class="quantity-control">
+                    <button type="button" class="quantity-btn minus" data-item="green_tea">-</button>
+                    <span class="quantity-display">0</span>
+                    <button type="button" class="quantity-btn plus" data-item="green_tea">+</button>
+                    <input type="hidden" name="green_tea" value="0">
+                  </div>
+                </div>
+                <div class="menu-item">
+                  <span>Green Tea with Mint</span>
+                  <div class="quantity-control">
+                    <button type="button" class="quantity-btn minus" data-item="mint_tea">-</button>
+                    <span class="quantity-display">0</span>
+                    <button type="button" class="quantity-btn plus" data-item="mint_tea">+</button>
+                    <input type="hidden" name="mint_tea" value="0">
+                  </div>
+                </div>
+                <div class="menu-item">
+                  <span>Lemon & Ginger Tea</span>
+                  <div class="quantity-control">
+                    <button type="button" class="quantity-btn minus" data-item="lemon_ginger_tea">-</button>
+                    <span class="quantity-display">0</span>
+                    <button type="button" class="quantity-btn plus" data-item="lemon_ginger_tea">+</button>
+                    <input type="hidden" name="lemon_ginger_tea" value="0">
+                  </div>
+                </div>
+                <div class="menu-item">
+                  <span>Green Matcha Tea</span>
+                  <div class="quantity-control">
+                    <button type="button" class="quantity-btn minus" data-item="matcha_tea">-</button>
+                    <span class="quantity-display">0</span>
+                    <button type="button" class="quantity-btn plus" data-item="matcha_tea">+</button>
+                    <input type="hidden" name="matcha_tea" value="0">
+                  </div>
+                </div>
+                <div class="menu-item">
+                  <span>Karak Tea</span>
+                  <div class="quantity-control">
+                    <button type="button" class="quantity-btn minus" data-item="karak_tea">-</button>
+                    <span class="quantity-display">0</span>
+                    <button type="button" class="quantity-btn plus" data-item="karak_tea">+</button>
+                    <input type="hidden" name="karak_tea" value="0">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column -->
+          <div class="menu-column">
+            <!-- Fresh Juice Section -->
+            <div class="menu-section">
+              <h3 class="menu-title">Fresh Juice</h3>
+              <div class="menu-items">
+                <div class="menu-item">
+                  <span>Avocado</span>
+                  <div class="quantity-control">
+                    <button type="button" class="quantity-btn minus" data-item="avocado_juice">-</button>
+                    <span class="quantity-display">0</span>
+                    <button type="button" class="quantity-btn plus" data-item="avocado_juice">+</button>
+                    <input type="hidden" name="avocado_juice" value="0">
+                  </div>
+                </div>
+                <div class="menu-item">
+                  <span>Cocktail</span>
+                  <div class="quantity-control">
+                    <button type="button" class="quantity-btn minus" data-item="cocktail_juice">-</button>
+                    <span class="quantity-display">0</span>
+                    <button type="button" class="quantity-btn plus" data-item="cocktail_juice">+</button>
+                    <input type="hidden" name="cocktail_juice" value="0">
+                  </div>
+                </div>
+                <div class="menu-item">
+                  <span>Mixed Berries</span>
+                  <div class="quantity-control">
+                    <button type="button" class="quantity-btn minus" data-item="mixed_berries">-</button>
+                    <span class="quantity-display">0</span>
+                    <button type="button" class="quantity-btn plus" data-item="mixed_berries">+</button>
+                    <input type="hidden" name="mixed_berries" value="0">
+                  </div>
+                </div>
+                <div class="menu-item">
+                  <span>Orange</span>
+                  <div class="quantity-control">
+                    <button type="button" class="quantity-btn minus" data-item="orange_juice">-</button>
+                    <span class="quantity-display">0</span>
+                    <button type="button" class="quantity-btn plus" data-item="orange_juice">+</button>
+                    <input type="hidden" name="orange_juice" value="0">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cold Drinks Section -->
+            <div class="menu-section">
+              <h3 class="menu-title">Cold Drinks</h3>
+              <div class="menu-items">
+                <div class="menu-item">
+                  <span>Sparkling Water</span>
+                  <div class="quantity-control">
+                    <button type="button" class="quantity-btn minus" data-item="sparkling_water">-</button>
+                    <span class="quantity-display">0</span>
+                    <button type="button" class="quantity-btn plus" data-item="sparkling_water">+</button>
+                    <input type="hidden" name="sparkling_water" value="0">
+                  </div>
+                </div>
+                <div class="menu-item">
+                  <span>Mineral Water</span>
+                  <div class="quantity-control">
+                    <button type="button" class="quantity-btn minus" data-item="mineral_water">-</button>
+                    <span class="quantity-display">0</span>
+                    <button type="button" class="quantity-btn plus" data-item="mineral_water">+</button>
+                    <input type="hidden" name="mineral_water" value="0">
+                  </div>
+                </div>
+                <div class="menu-item">
+                  <span>Diet 7Up</span>
+                  <div class="quantity-control">
+                    <button type="button" class="quantity-btn minus" data-item="diet_7up">-</button>
+                    <span class="quantity-display">0</span>
+                    <button type="button" class="quantity-btn plus" data-item="diet_7up">+</button>
+                    <input type="hidden" name="diet_7up" value="0">
+                  </div>
+                </div>
+                <div class="menu-item">
+                  <span>Diet Pepsi</span>
+                  <div class="quantity-control">
+                    <button type="button" class="quantity-btn minus" data-item="diet_pepsi">-</button>
+                    <span class="quantity-display">0</span>
+                    <button type="button" class="quantity-btn plus" data-item="diet_pepsi">+</button>
+                    <input type="hidden" name="diet_pepsi" value="0">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        
-        <div class="mb-3">
-          <label for="food" class="form-label">Food</label>
-          <input type="text" class="form-control" id="food" name="food" placeholder="Enter food order">
-        </div>
-        
-        <div class="mb-3">
-          <label for="extra" class="form-label">Extra Notes</label>
+
+        <div class="mb-3 mt-5 extra-notes-section">
+          <h3 class="menu-title mb-3">Extra Notes</h3>
           <textarea class="form-control" id="extra" name="extra" rows="3" placeholder="Any special requests?"></textarea>
         </div>
 
@@ -133,6 +416,33 @@
         }, false)
       })
     })()
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const quantityControls = document.querySelectorAll('.quantity-control');
+      
+      quantityControls.forEach(control => {
+        const minusBtn = control.querySelector('.minus');
+        const plusBtn = control.querySelector('.plus');
+        const display = control.querySelector('.quantity-display');
+        const input = control.querySelector('input[type="hidden"]');
+        
+        minusBtn.addEventListener('click', () => {
+          let value = parseInt(display.textContent);
+          if (value > 0) {
+            value--;
+            display.textContent = value;
+            input.value = value;
+          }
+        });
+        
+        plusBtn.addEventListener('click', () => {
+          let value = parseInt(display.textContent);
+          value++;
+          display.textContent = value;
+          input.value = value;
+        });
+      });
+    });
   </script>
 </body>
 </html>
