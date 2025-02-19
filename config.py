@@ -7,16 +7,12 @@ from firebase_admin import credentials, firestore
 # Load environment variables
 load_dotenv()
 
-# Check if running on Render
-if os.getenv('RENDER'):
-    # Use JSON string from environment variable
-    cred_dict = json.loads(os.getenv('GOOGLE_APPLICATION_CREDENTIALS'))
-    cred = credentials.Certificate(cred_dict)
-else:
-    # Use local file path
-    cred = credentials.Certificate(os.getenv('GOOGLE_APPLICATION_CREDENTIALS'))
+# Get credentials from environment variable
+cred_json = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+cred_dict = json.loads(cred_json)  # Parse the JSON string into a dictionary
+cred = credentials.Certificate(cred_dict)  # Use the dictionary directly
 
-# Initialize Firebase Admin with your service account credentials
+# Initialize Firebase Admin
 firebase_admin.initialize_app(cred)
 
 # Get Firestore client
