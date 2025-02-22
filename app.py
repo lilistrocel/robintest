@@ -100,7 +100,6 @@ def supplier():
         return render_template('supplier.html', tasks=tasks)
     except Exception as e:
         print(f"Error in supplier route: {e}")
-        # Return an error page instead of failing silently
         return render_template('supplier.html', tasks=[], error=str(e))
 
 @app.route('/stream')
