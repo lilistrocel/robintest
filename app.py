@@ -89,15 +89,19 @@ def supplier():
     try:
         if request.method == 'POST':
             task_id = request.form.get('task_id')
+            print(f"Received POST request with task_id: {task_id}")
             if task_id:
                 tasks_ref.document(task_id).delete()
+                print(f"Deleted task: {task_id}")
             return redirect(url_for('supplier'))
         
         tasks = get_all_tasks()
+        print(f"Retrieved tasks: {tasks}")
         return render_template('supplier.html', tasks=tasks)
     except Exception as e:
         print(f"Error in supplier route: {e}")
-        return render_template('supplier.html', tasks=[])
+        # Return an error page instead of failing silently
+        return render_template('supplier.html', tasks=[], error=str(e))
 
 @app.route('/stream')
 def stream():
