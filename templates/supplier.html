@@ -113,15 +113,34 @@
   </div>
 
   <!-- Socket.IO and jQuery Scripts -->
-  <!-- Server-Sent Events -->
+  <!-- Server-Sent Events with reconnection -->
   <script>
-    // Server-Sent Events
-    const evtSource = new EventSource("/stream");
-    
-    evtSource.onmessage = function(event) {
-      const tasks = JSON.parse(event.data);
-      updateTasks(tasks);
-    };
+    // Server-Sent Events with reconnection
+    let evtSource;
+
+    function connectEventSource() {
+        evtSource = new EventSource("/stream");
+        
+        evtSource.onmessage = function(event) {
+            const tasks = JSON.parse(event.data);
+            updateTasks(tasks);
+        };
+
+        evtSource.onerror = function(err) {
+            console.error("EventSource failed:", err);
+            evtSource.close();
+            setTimeout(connectEventSource, 5000); // Reconnect after 5 seconds
+        };
+    }
+
+    connectEventSource();
+
+    // Clean up on page unload
+    window.addEventListener('beforeunload', function() {
+        if (evtSource) {
+            evtSource.close();
+        }
+    });
 
     function updateTasks(tasks) {
       const container = $("#tasks-container");

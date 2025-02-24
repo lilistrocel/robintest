@@ -3,18 +3,22 @@ import json
 from dotenv import load_dotenv
 import firebase_admin
 from firebase_admin import credentials, firestore
+from firebase_admin._apps import get_app
 
 # Load environment variables
 load_dotenv()
 
-# Get credentials from environment variable
-cred_json = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
-cred_dict = json.loads(cred_json)  # Parse the JSON string into a dictionary
-cred = credentials.Certificate(cred_dict)  # Use the dictionary directly
-
-# Initialize Firebase Admin
-firebase_admin.initialize_app(cred)
+def initialize_firebase():
+    try:
+        # Check if already initialized
+        app = get_app()
+    except ValueError:
+        # Initialize if not already done
+        cred = credentials.Certificate('firebase-credentials.json')
+        firebase_admin.initialize_app(cred)
+    
+    return firestore.client()
 
 # Get Firestore client
-db = firestore.client()
+db = initialize_firebase()
 tasks_ref = db.collection('tasks') 

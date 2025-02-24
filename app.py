@@ -106,28 +106,31 @@ def supplier():
 def stream():
     """Server-Sent Events endpoint"""
     def event_stream():
-        queue = []
+        # Send initial data
+        tasks = get_all_tasks()
+        yield f"data: {json.dumps(tasks, cls=FirestoreEncoder)}\n\n"
+        
+        # Create a list to store active listeners
+        listeners = []
         
         def on_snapshot(doc_snapshot, changes, read_time):
             try:
-                # Add the updated tasks to the queue
                 tasks = get_all_tasks()
-                queue.append(tasks)
+                yield f"data: {json.dumps(tasks, cls=FirestoreEncoder)}\n\n"
             except Exception as e:
                 print(f"Error in snapshot listener: {e}")
         
-        # Create a real-time listener
+        # Create a real-time listener and store it
         doc_watch = tasks_ref.on_snapshot(on_snapshot)
+        listeners.append(doc_watch)
         
-        while True:
-            try:
-                if queue:
-                    tasks = queue.pop(0)
-                    yield f"data: {json.dumps(tasks, cls=FirestoreEncoder)}\n\n"
-                time.sleep(0.5)
-            except Exception as e:
-                print(f"Error in event stream: {e}")
-                time.sleep(1)
+        try:
+            while True:
+                time.sleep(1)  # Keep connection alive
+        except GeneratorExit:
+            # Clean up listeners when client disconnects
+            for listener in listeners:
+                listener.unsubscribe()
             
     return Response(event_stream(), mimetype="text/event-stream")
 
