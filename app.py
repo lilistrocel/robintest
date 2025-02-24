@@ -89,18 +89,18 @@ def supplier():
     try:
         if request.method == 'POST':
             task_id = request.form.get('task_id')
-            print(f"Received POST request with task_id: {task_id}")
             if task_id:
-                tasks_ref.document(task_id).delete()
-                print(f"Deleted task: {task_id}")
+                try:
+                    tasks_ref.document(task_id).delete()
+                except Exception as e:
+                    print(f"Error deleting task: {e}")
             return redirect(url_for('supplier'))
         
         tasks = get_all_tasks()
-        print(f"Retrieved tasks: {tasks}")
         return render_template('supplier.html', tasks=tasks)
     except Exception as e:
         print(f"Error in supplier route: {e}")
-        return render_template('supplier.html', tasks=[], error=str(e))
+        return "An error occurred", 500
 
 @app.route('/stream')
 def stream():
@@ -110,27 +110,26 @@ def stream():
         tasks = get_all_tasks()
         yield f"data: {json.dumps(tasks, cls=FirestoreEncoder)}\n\n"
         
-        # Create a list to store active listeners
-        listeners = []
-        
+        queue = []
         def on_snapshot(doc_snapshot, changes, read_time):
             try:
                 tasks = get_all_tasks()
-                yield f"data: {json.dumps(tasks, cls=FirestoreEncoder)}\n\n"
+                queue.append(tasks)
             except Exception as e:
                 print(f"Error in snapshot listener: {e}")
         
-        # Create a real-time listener and store it
+        # Create a real-time listener
         doc_watch = tasks_ref.on_snapshot(on_snapshot)
-        listeners.append(doc_watch)
         
         try:
             while True:
-                time.sleep(1)  # Keep connection alive
+                if queue:
+                    tasks = queue.pop(0)
+                    yield f"data: {json.dumps(tasks, cls=FirestoreEncoder)}\n\n"
+                time.sleep(0.5)
         except GeneratorExit:
-            # Clean up listeners when client disconnects
-            for listener in listeners:
-                listener.unsubscribe()
+            # Clean up when client disconnects
+            doc_watch.unsubscribe()
             
     return Response(event_stream(), mimetype="text/event-stream")
 
